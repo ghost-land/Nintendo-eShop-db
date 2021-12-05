@@ -12,3 +12,6 @@ All language titles :
 - [JP titles](https://samurai.ctr.shop.nintendo.net/samurai/ws/JP/titles)
 - [RU titles](https://samurai.ctr.shop.nintendo.net/samurai/ws/RU/titles)
 - [US titles](https://samurai.ctr.shop.nintendo.net/samurai/ws/US/titles)
+
+
+View [here](https://github.com/d0k3/eshop-analysis/blob/master/eat.py) for eShop analysis. (by [d0k3](https://github.com/d0k3))
