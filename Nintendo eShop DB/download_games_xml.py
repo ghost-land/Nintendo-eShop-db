@@ -2,6 +2,7 @@ import os
 import re
 import requests
 import xml.etree.ElementTree as ET
+from PIL import Image
 
 # List of country codes to download
 country_codes = ["US", "AN", "CH", "CO", "ES", "FR", "IT", "JP", "RU"]
@@ -47,3 +48,16 @@ for country_code in country_codes:
             xml_file = f"{game_directory}/game_info.xml"
             with open(xml_file, "w", encoding="utf-8") as f:
                 f.write(response.text)
+
+            # download icon
+            icon_url = content.find(".//icon_url").text
+            icon_response = requests.get(icon_url, verify=False)
+            icon_file = f"{game_directory}/icon_72x72.png"
+            open(icon_file, "wb").write(icon_response.content)
+            # convert to png
+            img = Image.open(icon_file)
+            img.save(icon_file)
+            #resize the image to 48x48
+            img = Image.open(icon_file)
+            img = img.resize((48, 48))
+            img.save(f"{game_directory}/icon_48x48.png")
