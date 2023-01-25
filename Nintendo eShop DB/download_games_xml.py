@@ -66,26 +66,16 @@ for country_code in country_codes:
                 img = img.resize((48, 48))
                 img.save(f"{game_directory}/icon_48x48.png")
 
-            # Create directory to store screenshots
-            screenshots_directory = f"{game_directory}/screenshots"
-            if not os.path.exists(screenshots_directory):
-                os.makedirs(screenshots_directory)
 
-            # download and combine screenshots
-            screenshots_element = content.find(".//screenshots")
-            if screenshots_element is not None:
-                screenshot_count = 1
-                for screenshot in screenshots_element.findall(".//screenshot"):
-                    upper_image_url = screenshot.find(".//image_url[@type='upper']")
-                    lower_image_url = screenshot.find(".//image_url[@type='lower']")
-                    if upper_image_url is not None and lower_image_url is not None:
-                        upper_image_url = upper_image_url.text
-                        upper_image = Image.open(BytesIO(requests.get(upper_image_url).content))
-                        lower_image_url = lower_image_url.text
-                        lower_image = Image.open(BytesIO(requests.get(lower_image_url).content))
-                        total_height = upper_image.height + lower_image.height
-                        combined_image = Image.new("RGBA", (upper_image.width, total_height))
-                        combined_image.paste(upper_image, (0, 0))
-                        combined_image.paste(lower_image, (0, upper_image.height))
-                        combined_image.save(f"{screenshots_directory}/screen_{screenshot_count}.png", "PNG")
-                        screenshot_count += 1
+                root = ET.fromstring(response.text)
+                screenshots = root.findall(".//screenshots/screenshot")
+                if screenshots:
+                    if not os.path.exists(f"{game_directory}/screenshots"):
+                        os.makedirs(f"{game_directory}/screenshots")
+                    for i, screenshot in enumerate(screenshots):
+                        for url_type in ["upper", "lower"]:
+                            url = screenshot.find(f".//image_url[@type='{url_type}']").text
+                            response = requests.get(url, verify=False)
+                            filename = f"{game_directory}/screenshots/{url_type}_{i+1}.jpg"
+                            open(filename, "wb").write(response.content)
+
