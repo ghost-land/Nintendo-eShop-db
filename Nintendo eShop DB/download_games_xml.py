@@ -42,8 +42,9 @@ for country_code in country_codes:
         if product_code.startswith('CTR') or product_code.startswith('KTR'):
             # Create directory to store XML files
             game_directory = f"Nintendo eShop DB/{country_code}/{format_name(name)}"
-            if not os.path.exists(game_directory):
-                os.makedirs(game_directory)
+            if os.path.exists(game_directory):
+                continue
+            os.makedirs(game_directory)
             # Save XML file as game_info.xml
             xml_file = f"{game_directory}/game_info.xml"
             with open(xml_file, "w", encoding="utf-8") as f:
