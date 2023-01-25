@@ -50,14 +50,18 @@ for country_code in country_codes:
                 f.write(response.text)
 
             # download icon
-            icon_url = content.find(".//icon_url").text
-            icon_response = requests.get(icon_url, verify=False)
-            icon_file = f"{game_directory}/icon_72x72.png"
-            open(icon_file, "wb").write(icon_response.content)
-            # convert to png
-            img = Image.open(icon_file)
-            img.save(icon_file)
-            #resize the image to 48x48
-            img = Image.open(icon_file)
-            img = img.resize((48, 48))
-            img.save(f"{game_directory}/icon_48x48.png")
+            icon_url_element = content.find(".//icon_url")
+            if icon_url_element is not None:
+                icon_url = icon_url_element.text
+                icon_response = requests.get(icon_url, verify=False)
+                icon_file = f"{game_directory}/icon_72x72.png"
+                open(icon_file, "wb").write(icon_response.content)
+
+                # convert to png
+                img = Image.open(icon_file)
+                img.save(icon_file)
+                
+                #resize the image to 48x48
+                img = Image.open(icon_file)
+                img = img.resize((48, 48))
+                img.save(f"{game_directory}/icon_48x48.png")
