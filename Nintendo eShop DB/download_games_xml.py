@@ -57,25 +57,24 @@ for country_code in country_codes:
                 icon_file = f"{game_directory}/icon_72x72.png"
                 open(icon_file, "wb").write(icon_response.content)
 
-                # convert to png
+                # convert icon to png
                 img = Image.open(icon_file)
                 img.save(icon_file)
 
-                # resize the image to 48x48
+                # resize the icon to 48x48
                 img = Image.open(icon_file)
                 img = img.resize((48, 48))
                 img.save(f"{game_directory}/icon_48x48.png")
 
-
+                # download screenshots
                 root = ET.fromstring(response.text)
                 screenshots = root.findall(".//screenshots/screenshot")
                 if screenshots:
                     if not os.path.exists(f"{game_directory}/screenshots"):
                         os.makedirs(f"{game_directory}/screenshots")
-                    for i, screenshot in enumerate(screenshots):
-                        for url_type in ["upper", "lower"]:
-                            url = screenshot.find(f".//image_url[@type='{url_type}']").text
-                            response = requests.get(url, verify=False)
-                            filename = f"{game_directory}/screenshots/{url_type}_{i+1}.jpg"
-                            open(filename, "wb").write(response.content)
-
+                        for i, screenshot in enumerate(screenshots):
+                            for url_type in ["upper", "lower"]:
+                                url = screenshot.find(f".//image_url[@type='{url_type}']").text
+                                response = requests.get(url, verify=False)
+                                filename = f"{game_directory}/screenshots/{url_type}_{i+1}.jpg"
+                                open(filename, "wb").write(response.content)
