@@ -1,0 +1,4 @@
+{
+    "deepscan.enable": true,
+    "python.analysis.typeCheckingMode": "basic"
+}
