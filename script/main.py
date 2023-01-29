@@ -9,7 +9,7 @@ from imageconvertor import concatenate_images
 import urllib3
 urllib3.disable_warnings()
 
-country_codes = ["US", "AN", "CH", "CO", "ES", "FR", "IT", "JP", "RU"]
+country_codes = ["AE", "AG", "AI", "AN", "AR", "AW", "BB", "BM", "BO", "BR", "BS", "BZ", "CH", "CO", "CR", "CY", "CZ", "DE", "DK", "DM", "DO", "ES", "EE", "FR", "GF", "GP", "GR", "GT", "GY", "HK", "HN", "HU", "IE", "IT", "JM", "JP", "KR", "LC", "LT", "LU", "LV", "MT", "NL", "NO", "NZ", "PA", "PE", "PL", "PT", "RO", "RU", "SA", "SE", "SG", "SI", "SK", "SR", "SV", "TR", "TT", "TW", "US", "UY", "VC", "VE", "VI"]
 
 def format_name(name):
     name = re.sub(r"[^\w\s]", '', name)
@@ -38,7 +38,7 @@ for country_code in country_codes:
             print(f"Error: {e}")
             continue
 
-        if product_code.startswith('CTR') or product_code.startswith('KTR'):
+        if product_code.startswith('CTR') or product_code.startswith('KTR') or product_code.startswith('TWL'):
             game_directory = f"Nintendo eShop DB/{country_code}/{format_name(name)}"
             if not os.path.exists(game_directory):
                 os.makedirs(game_directory)
