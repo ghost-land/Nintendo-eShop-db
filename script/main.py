@@ -76,11 +76,20 @@ for country_code in country_codes:
                     if not os.path.exists(f"{game_directory}/screenshots"):
                         os.makedirs(f"{game_directory}/screenshots")
                     for i, screenshot in enumerate(screenshots):
-                        for url_type in ["upper", "lower"]:
-                            url = screenshot.find(f".//image_url[@type='{url_type}']").text
-                            response = requests.get(url, verify=False)
-                            filename = f"{game_directory}/screenshots/{url_type}_{i+1}.png"
+                        upper_image_url = screenshot.find(".//image_url[@type='upper']")
+                        lower_image_url = screenshot.find(".//image_url[@type='lower']")
+                        if upper_image_url is not None:
+                            upper_url = upper_image_url.text
+                            response = requests.get(upper_url, verify=False)
+                            filename = f"{game_directory}/screenshots/upper_{i+1}.png"
                             open(filename, "wb").write(response.content)
-                        concatenate_images(f"{game_directory}/screenshots/upper_{i+1}.png", f"{game_directory}/screenshots/lower_{i+1}.png", f"{game_directory}/screenshots/screenshot_{i+1}.png")   
+                            if lower_image_url is not None:
+                                lower_url = lower_image_url.text
+                                response = requests.get(lower_url, verify=False)
+                                filename = f"{game_directory}/screenshots/lower_{i+1}.png"
+                                open(filename, "wb").write(response.content)
+                                if upper_image_url is not None and lower_image_url is not None:
+                                    concatenate_images(f"{game_directory}/screenshots/upper_{i+1}.png", f"{game_directory}/screenshots/lower_{i+1}.png", f"{game_directory}/screenshots/screenshot_{i+1}.png")
+
                   
                       
