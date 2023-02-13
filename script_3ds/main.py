@@ -39,7 +39,7 @@ for country_code in country_codes:
             continue
 
         if product_code.startswith('CTR') or product_code.startswith('KTR') or product_code.startswith('TWL'):
-            game_directory = f"Nintendo eShop DB/{country_code}/{format_name(name)}"
+            game_directory = f"Nintendo eShop 3DS DB/{country_code}/{format_name(name)}"
             if not os.path.exists(game_directory):
                 os.makedirs(game_directory)
             xml_file = f"{game_directory}/game_info.xml"
