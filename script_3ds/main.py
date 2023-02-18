@@ -92,4 +92,3 @@ for country_code in country_codes:
                                     concatenate_images(f"{game_directory}/screenshots/upper_{i+1}.png", f"{game_directory}/screenshots/lower_{i+1}.png", f"{game_directory}/screenshots/screenshot_{i+1}.png")
 
                   
-                      
