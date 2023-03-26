@@ -16,7 +16,7 @@ def format_name(name):
     return name
 
 for country_code in country_codes:
-    url = f"https://samurai.ctr.shop.nintendo.net/samurai/ws/{country_code}/titles?limit=1000000000"
+    url = f"https://samurai.ctr.shop.nintendo.net/samurai/ws/{country_code}/titles?shop_id=2&limit=3000&offset=0"
     try:
         response = requests.get(url, verify=False)
     except requests.exceptions.RequestException as e:
