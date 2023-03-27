@@ -14,14 +14,14 @@ urllib3.disable_warnings()
 country_codes = ["AE", "AG", "AI", "AN", "AR", "AW", "BB", "BM", "BO", "BR", "BS", "BZ", "CH", "CO", "CR", "CY", "CZ", "DE", "DK", "DM", "DO", "ES", "EE", "FR", "GF", "GP", "GR", "GT", "GY", "HK", "HN", "HU",
                  "IE", "IT", "JM", "JP", "KR", "LC", "LT", "LU", "LV", "MT", "NL", "NO", "NZ", "PA", "PE", "PL", "PT", "RO", "RU", "SA", "SE", "SG", "SI", "SK", "SR", "SV", "TR", "TT", "TW", "US", "UY", "VC", "VE", "VI"]
 
-# Fonction qui format le nom du jeu
+# Function that formats the name of the game
 def format_name(name):
     name = re.sub(r"[^\w\s]", '', name)
     name = " ".join([word.capitalize() for word in name.split()])
     return name
 
 
-# Fonction qui crée les fichiers xml et les images pour un jeu
+# Function that creates xml files and images for a game
 def create_game_files(country_code, content):
     title_id = content.find(".//title").attrib["id"]
     product_code = content.find(".//product_code").text
@@ -91,7 +91,7 @@ def create_game_files(country_code, content):
                                                    f"{game_directory}/screenshots/lower_{i+1}.png", f"{game_directory}/screenshots/screenshot_{i+1}.png")
 
 
-# Fonction qui permet de récupérer les données d'un pays
+# Function to retrieve data from a country
 def get_data_from_country(country_code):
     goodContent = False
     while goodContent == False:
@@ -107,7 +107,7 @@ def get_data_from_country(country_code):
         create_game_files(country_code, content)
 
 
-# Fonction qui lance un thread pour chaque pays
+# Function that starts a thread for each country
 def main():
     threads = []
     for country_code in country_codes:
@@ -118,7 +118,7 @@ def main():
     for thread in threads:
         thread.join()
 
-    # Création du fichier all_xml.xml
+    # Creation of the file all_xml.xml
     all_xml_file = 'all_xml.xml'
     root = ET.Element('games')
     for country_code in country_codes:
@@ -162,11 +162,11 @@ def main():
                     ET.SubElement(game, 'official_website').text = official_website
                     ET.SubElement(game, 'copyright').text = copyright
 
-    # Création du dossier all_xml
+    # Creation of the all_xml folder
     all_xml_directory = 'all_xml'
     if not os.path.exists(all_xml_directory):
         os.makedirs(all_xml_directory)
-    # Enregistrement du fichier all_xml
+    # Save the all_xml file
     ET.ElementTree(root).write(os.path.join(all_xml_directory, all_xml_file))
 
     print("Done")
