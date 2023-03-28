@@ -3,10 +3,8 @@ import re
 import requests
 import xml.etree.ElementTree as ET
 from PIL import Image
-import pathlib
 from imageconvertor import concatenate_images
 import threading
-import time
 
 import urllib3
 urllib3.disable_warnings()
@@ -67,7 +65,19 @@ def create_game_files(country_code, content):
                 open(banner_file, "wb").write(banner_response.content)
                 img = Image.open(banner_file)
                 img.save(banner_file)
-
+                
+            thumbnails = root.findall(".//thumbnails")
+            if thumbnails:
+                if not os.path.exists(f"{game_directory}/thumbnails"):
+                    os.makedirs(f"{game_directory}/thumbnails")
+                for th in thumbnails:
+                    for i,thumbnail in enumerate(th): 
+                        response = requests.get(thumbnail.get('url'), verify=False)
+                        filename = f"{game_directory}/thumbnails/thumbnail_{i+1}.png"
+                        open(filename, "wb").write(response.content)
+                        img = Image.open(filename)
+                        img.save(filename)
+                        
             screenshots = root.findall(".//screenshots/screenshot")
             if screenshots:
                 if not os.path.exists(f"{game_directory}/screenshots"):
