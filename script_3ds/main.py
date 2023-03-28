@@ -28,9 +28,11 @@ def create_game_files(country_code, content):
     product_code = content.find(".//product_code").text
     name = content.find(".//name").text
     print(
-        f"title_id: {title_id}, product_code: {product_code}, name: {name}")
+        f"Game found : title_id: {title_id}, product_code: {product_code}, name: {name}")
 
     url = f"https://samurai.ctr.shop.nintendo.net/samurai/ws/{country_code}/title/{title_id}/?shop_id=1"
+    print(
+        f"Retrieving data from {url}")
     goodroot = False
     while goodroot == False:
         try:
@@ -103,6 +105,8 @@ def get_data_from_country(country_code):
     goodContent = False
     while goodContent == False:
         url = f"https://samurai.ctr.shop.nintendo.net/samurai/ws/{country_code}/titles?shop_id=1&limit=3000&offset=0"
+        print(
+        f"Retrieving data from {url}")
         try:
             response = requests.get(url, verify=False)
             root = ET.fromstring(response.text)
@@ -125,7 +129,7 @@ def main():
     for thread in threads:
         thread.join()
 
-    print("Done")
+    print("\n" + "All done!")
 
 if __name__ == "__main__":
     main()
