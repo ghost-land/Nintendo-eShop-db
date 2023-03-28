@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 from PIL import Image
 from imageconvertor import concatenate_images
 import threading
+from io import BytesIO
 
 import urllib3
 urllib3.disable_warnings()
@@ -52,9 +53,7 @@ def create_game_files(country_code, content):
             icon_url = icon_url_element.text
             icon_response = requests.get(icon_url, verify=False)
             icon_file = f"{game_directory}/icon.png"
-            open(icon_file, "wb").write(icon_response.content)
-
-            img = Image.open(icon_file)
+            img = Image.open(BytesIO(icon_response.content))
             img.save(icon_file)
 
             banner_url_element = root.find(".//banner_url")
@@ -62,8 +61,7 @@ def create_game_files(country_code, content):
                 banner_url = banner_url_element.text
                 banner_response = requests.get(banner_url, verify=False)
                 banner_file = f"{game_directory}/banner.png"
-                open(banner_file, "wb").write(banner_response.content)
-                img = Image.open(banner_file)
+                img = Image.open(BytesIO(banner_response.content))
                 img.save(banner_file)
                 
             thumbnails = root.findall(".//thumbnails")
@@ -74,8 +72,7 @@ def create_game_files(country_code, content):
                     for i,thumbnail in enumerate(th): 
                         response = requests.get(thumbnail.get('url'), verify=False)
                         filename = f"{game_directory}/thumbnails/thumbnail_{i+1}.png"
-                        open(filename, "wb").write(response.content)
-                        img = Image.open(filename)
+                        img = Image.open(BytesIO(response.content))
                         img.save(filename)
                         
             screenshots = root.findall(".//screenshots/screenshot")
@@ -90,17 +87,15 @@ def create_game_files(country_code, content):
                     if upper_image_url is not None:
                         upper_url = upper_image_url.text
                         response = requests.get(upper_url, verify=False)
-                        filename = f"{game_directory}/screenshots/upper_{i+1}.png"
-                        open(filename, "wb").write(response.content)
+                        upper_image = BytesIO(response.content)
                         if lower_image_url is not None:
                             lower_url = lower_image_url.text
                             response = requests.get(
                                 lower_url, verify=False)
-                            filename = f"{game_directory}/screenshots/lower_{i+1}.png"
-                            open(filename, "wb").write(response.content)
+                            lower_image = BytesIO(response.content)
                             if upper_image_url is not None and lower_image_url is not None:
-                                concatenate_images(f"{game_directory}/screenshots/upper_{i+1}.png",
-                                                   f"{game_directory}/screenshots/lower_{i+1}.png", f"{game_directory}/screenshots/screenshot_{i+1}.png")
+                                concatenate_images(upper_image,
+                                                   lower_image, f"{game_directory}/screenshots/screenshot_{i+1}.png")
 
 
 # Function to retrieve data from a country
