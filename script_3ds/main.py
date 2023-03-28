@@ -118,59 +118,7 @@ def main():
     for thread in threads:
         thread.join()
 
-    # Creation of the file all_xml.xml
-    all_xml_file = 'all_xml.xml'
-    root = ET.Element('games')
-    for country_code in country_codes:
-        for folderName, subfolders, filenames in os.walk(f"Nintendo eShop 3DS DB/{country_code}"):
-            for filename in filenames:
-                if filename == 'game_info.xml':
-                    game_info_file = os.path.join(folderName, filename)
-                    game_info_root = ET.parse(game_info_file).getroot()
-                    
-                    game = ET.SubElement(root, 'game')
-
-                    title_id = game_info_root.find('.//title').attrib['id']
-                    product_code = game_info_root.find('.//product_code').text
-                    region = country_code
-                    name = game_info_root.find('.//name').text
-                    plateform_name = game_info_root.find('.//plateform_name').text
-                    release_date = game_info_root.find('.//release_date').text
-                    selling_price = game_info_root.find('.//selling_price').text
-                    publisher = game_info_root.find('.//publisher').text
-                    description = game_info_root.find('.//description').text
-                    age_rating = game_info_root.find('.//age_rating').text
-                    genre = game_info_root.find('.//genre').text
-                    players = game_info_root.find('.//players').text
-                    compatible_controllers = game_info_root.find('.//compatible_controllers').text
-                    official_website = game_info_root.find('.//official_website').text
-                    copyright = game_info_root.find('.//copyright').text
-
-                    ET.SubElement(game, 'title_id').text = title_id
-                    ET.SubElement(game, 'product_code').text = product_code
-                    ET.SubElement(game, 'region').text = region
-                    ET.SubElement(game, 'name').text = name
-                    ET.SubElement(game, 'plateform_name').text = plateform_name
-                    ET.SubElement(game, 'release_date').text = release_date
-                    ET.SubElement(game, 'selling_price').text = selling_price
-                    ET.SubElement(game, 'publisher').text = publisher
-                    ET.SubElement(game, 'description').text = description
-                    ET.SubElement(game, 'age_rating').text = age_rating
-                    ET.SubElement(game, 'genre').text = genre
-                    ET.SubElement(game, 'players').text = players
-                    ET.SubElement(game, 'compatible_controllers').text = compatible_controllers
-                    ET.SubElement(game, 'official_website').text = official_website
-                    ET.SubElement(game, 'copyright').text = copyright
-
-    # Creation of the all_xml folder
-    all_xml_directory = 'all_xml'
-    if not os.path.exists(all_xml_directory):
-        os.makedirs(all_xml_directory)
-    # Save the all_xml file
-    ET.ElementTree(root).write(os.path.join(all_xml_directory, all_xml_file))
-
     print("Done")
-
 
 if __name__ == "__main__":
     main()
