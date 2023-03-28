@@ -11,8 +11,10 @@ import time
 import urllib3
 urllib3.disable_warnings()
 
-country_codes = ["AE", "AG", "AI", "AN", "AR", "AW", "BB", "BM", "BO", "BR", "BS", "BZ", "CH", "CO", "CR", "CY", "CZ", "DE", "DK", "DM", "DO", "ES", "EE", "FR", "GF", "GP", "GR", "GT", "GY", "HK", "HN", "HU",
-                 "IE", "IT", "JM", "JP", "KR", "LC", "LT", "LU", "LV", "MT", "NL", "NO", "NZ", "PA", "PE", "PL", "PT", "RO", "RU", "SA", "SE", "SG", "SI", "SK", "SR", "SV", "TR", "TT", "TW", "US", "UY", "VC", "VE", "VI"]
+country_codes = ["AD", "AE", "AG", "AI", "AL", "AN", "AR", "AT", "AU", "AW", "AZ", "BA", "BB", "BE", "BG", "BM", "BO", "BR", "BS", "BW", "BZ", "CA", "CH", "CL", "CN", "CO", "CR", "CY", "CZ", "DE", "DJ", "DK",
+                 "DM", "DO", "EC", "EE", "ER", "ES", "FI", "FR", "GB", "GD", "GF", "GG", "GI", "GP", "GR", "GT", "GY", "HK", "HN", "HR", "HT", "HU", "IE", "IL", "IM", "IN", "IS", "IT", "JE", "JM", "JP", "KN",
+                 "KR", "KY", "LC", "LI", "LS", "LT", "LU", "LV", "MC", "ME", "MK", "ML", "MQ", "MR", "MS", "MT", "MX", "MY", "MZ", "NA", "NE", "NI", "NL", "NO", "NZ", "PA", "PE", "PL", "PT", "PY", "RO", "RS",
+                 "RU", "SA", "SD", "SE", "SG", "SI", "SK", "SM", "SO", "SR", "SV", "SZ", "TC", "TD", "TR", "TT", "TW", "US", "UY", "VA", "VC", "VE", "VG", "VI", "ZA", "ZM", "ZW"]
 
 # Function that formats the name of the game
 def format_name(name):
