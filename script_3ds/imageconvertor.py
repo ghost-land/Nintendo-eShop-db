@@ -1,9 +1,9 @@
 from PIL import Image
 import os
 
-def concatenate_images(upper_image_path, lower_image_path, output_path):
-    upper_image = Image.open(upper_image_path)
-    lower_image = Image.open(lower_image_path)
+def concatenate_images(upper_image_byte, lower_image_byte, output_path):
+    upper_image = Image.open(upper_image_byte)
+    lower_image = Image.open(lower_image_byte)
 
     width, upper_height = upper_image.size
     _, lower_height = lower_image.size
@@ -16,7 +16,6 @@ def concatenate_images(upper_image_path, lower_image_path, output_path):
     result_image.save(output_path)
     upper_image.close()
     lower_image.close() 
-    os.remove(upper_image_path)
-    os.remove(lower_image_path)
+
     
     
