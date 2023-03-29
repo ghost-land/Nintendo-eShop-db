@@ -6,7 +6,7 @@ from PIL import Image
 import threading
 import urllib3
 import pathlib
-
+from io import BytesIO
 # Disable SSL certificate warnings
 urllib3.disable_warnings()
 
@@ -26,9 +26,7 @@ def format_name(name):
 def download_image(url, filename):
     try:
         response = requests.get(url, verify=False)
-        with open(filename, "wb") as f:
-            f.write(response.content)
-        img = Image.open(filename)
+        img = Image.open(BytesIO(response.content))
         img.save(filename)
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
@@ -48,6 +46,8 @@ def process_game(country_code, content):
     try:
         response = requests.get(url, verify=False)
         xml_string = response.text
+        root = ET.fromstring(xml_string)
+
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
         return
@@ -81,11 +81,18 @@ def process_game(country_code, content):
                 download_image(banner_url, banner_file)
 
             # Download and save screenshots
-            screenshot_elements = content.findall(".//screenshot_url")
-            for i, screenshot_element in enumerate(screenshot_elements):
-                screenshot_url = screenshot_element.text
-                screenshot_file = f"{ressources_directory}/screenshot_{i}.png"
-                download_image(screenshot_url, screenshot_file)
+            for i, screenshot in enumerate(root.findall(".//image_url")):
+                screenshots_directory = f"{game_directory}/screenshots"
+                if not os.path.exists(screenshots_directory):
+                    os.makedirs(screenshots_directory)
+
+                if screenshot is not None:
+                    screenshots_directory = f"{game_directory}/screenshots"
+                    screenshot_url = screenshot.text
+                    screenshot_file = f"{screenshots_directory}/screenshot_{i+1}.png"
+                    download_image(screenshot_url, screenshot_file)
+                else:
+                    print("No screenshot found")
         except Exception as e:
             print(f"Error processing game {title_id}: {e}")
 
