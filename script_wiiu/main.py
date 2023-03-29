@@ -43,14 +43,15 @@ def process_game(country_code, content):
     url = f"https://samurai.ctr.shop.nintendo.net/samurai/ws/{country_code}/title/{title_id}/?shop_id=2"
     print(
         f"Retrieving data from {url}")
-    try:
-        response = requests.get(url, verify=False)
-        xml_string = response.text
-        root = ET.fromstring(xml_string)
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-        return
+    goodRoot = False
+    while not goodRoot:
+        try:
+            response = requests.get(url, verify=False)
+            xml_string = response.text
+            root = ET.fromstring(xml_string)
+            goodRoot = True
+        except  (ET.ParseError, requests.exceptions.RequestException) as e:
+            print(f"Error: {e}")
 
     # If the product is a Wii U game, download the resources (images)
     if product_code.startswith('WUP'):
@@ -106,10 +107,10 @@ def get_games(country_code):
     try:
         response = requests.get(url, verify=False)
         xml_string = response.text
-    except requests.exceptions.RequestException as e:
+        root = ET.fromstring(xml_string)
+    except  (ET.ParseError, requests.exceptions.RequestException) as e:
         print(f"Error: {e}")
         return []
-    root = ET.fromstring(xml_string)
     games = root.findall(".//content")
     return games
     
