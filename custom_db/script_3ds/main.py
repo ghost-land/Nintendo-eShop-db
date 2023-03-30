@@ -31,6 +31,27 @@ def generate_xml_files():
                         for banner_url_element in game_xml.findall('.//banner_url'):
                             banner_url_element.text = banner_url
                         region_xml.append(game_xml)
+                        # replace screenshot URLs
+                        for i, screenshot_element in enumerate(game_xml.findall('.//screenshot')):
+                            screenshot_path = os.path.join(game_path, f'screenshots/screenshot_{i+1}.png')
+                            screenshot_url_path = os.path.relpath(screenshot_path, './Nintendo eShop 3DS DB/').replace('\\', '/')
+                            screenshot_url = 'https://cdn.ghosteshop.com/db/3ds/' + urllib.parse.quote(screenshot_url_path)    
+                            # Remove existing image_url elements
+                            for image_url_element in screenshot_element.findall('.//image_url'):
+                                screenshot_element.remove(image_url_element)    
+                            # Create a new image_url element with type="png"
+                            new_image_url_element = ET.Element('image_url', {'type': 'png'})
+                            new_image_url_element.text = screenshot_url    
+                            # Add the new image_url element to the screenshot element
+                            screenshot_element.append(new_image_url_element)
+                            # replace thumbnail URLs
+                            for i, thumbnail_element in enumerate(game_xml.findall('.//thumbnail')):
+                                thumbnail_path = os.path.join(game_path, f'thumbnails/thumbnail_{i+1}.png')
+                                thumbnail_url_path = os.path.relpath(thumbnail_path, './Nintendo eShop 3DS DB/').replace('\\', '/')
+                                thumbnail_url = 'https://cdn.ghosteshop.com/db/3ds/' + urllib.parse.quote(thumbnail_url_path)
+                                # Update the thumbnail attributes
+                                thumbnail_element.attrib['url'] = thumbnail_url
+                                thumbnail_element.attrib['type'] = 'png'
             xml_string = ET.tostring(region_xml).decode()
             xml_dir = os.path.join('nlib', '3ds_db', 'country')
             if not os.path.exists(xml_dir):
