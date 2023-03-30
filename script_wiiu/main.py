@@ -38,23 +38,21 @@ def process_game(country_code, content):
     name = content.find(".//name").text
 
     print(f"Game found : title_id: {title_id}, product_code: {product_code}, name: {name}")
-
-    # Download the game information in XML
-    url = f"https://samurai.ctr.shop.nintendo.net/samurai/ws/{country_code}/title/{title_id}/?shop_id=2"
-    print(
-        f"Retrieving data from {url}")
-    goodRoot = False
-    while not goodRoot:
-        try:
-            response = requests.get(url, verify=False)
-            xml_string = response.text
-            root = ET.fromstring(xml_string)
-            goodRoot = True
-        except  (ET.ParseError, requests.exceptions.RequestException) as e:
-            print(f"Error: {e}")
-
     # If the product is a Wii U game, download the resources (images)
     if product_code.startswith('WUP'):
+            # Download the game information in XML
+        url = f"https://samurai.ctr.shop.nintendo.net/samurai/ws/{country_code}/title/{title_id}/?shop_id=2"
+        print(
+            f"Retrieving data from {url}")
+        goodRoot = False
+        while not goodRoot:
+            try:
+                response = requests.get(url, verify=False)
+                xml_string = response.text
+                root = ET.fromstring(xml_string)
+                goodRoot = True
+            except  (ET.ParseError, requests.exceptions.RequestException) as e:
+                print(f"Error: {e}")
         game_directory = f"Nintendo eShop WiiU DB/{country_code}/{format_name(name)}"
         ressources_directory = f"{game_directory}/ressources"
 
@@ -111,6 +109,13 @@ def get_games(country_code):
     except  (ET.ParseError, requests.exceptions.RequestException) as e:
         print(f"Error: {e}")
         return []
+    
+    if root.findall(".//content"):
+        xml_dir = f"Nintendo eShop WiiU DB/{country_code}/"    
+        if not os.path.exists(xml_dir):
+            os.makedirs(xml_dir)
+        
+        open(xml_dir+"region_info.xml", "wb").write(response.content)
     games = root.findall(".//content")
     return games
     

@@ -30,19 +30,18 @@ def create_game_files(country_code, content):
     print(
         f"Game found : title_id: {title_id}, product_code: {product_code}, name: {name}")
 
-    url = f"https://samurai.ctr.shop.nintendo.net/samurai/ws/{country_code}/title/{title_id}/?shop_id=1"
-    print(
-        f"Retrieving data from {url}")
-    goodroot = False
-    while goodroot == False:
-        try:
-            response = requests.get(url, verify=False)
-            root = ET.fromstring(response.text)
-            goodroot = True
-        except (ET.ParseError, requests.exceptions.RequestException) as e:
-            print(f"Error : {e} ")
-
     if product_code.startswith('CTR') or product_code.startswith('KTR') or product_code.startswith('TWL'):
+        url = f"https://samurai.ctr.shop.nintendo.net/samurai/ws/{country_code}/title/{title_id}/?shop_id=1"
+        print(
+            f"Retrieving data from {url}")
+        goodroot = False
+        while goodroot == False:
+            try:
+                response = requests.get(url, verify=False)
+                root = ET.fromstring(response.text)
+                goodroot = True
+            except (ET.ParseError, requests.exceptions.RequestException) as e:
+                print(f"Error : {e} ")
         game_directory = f"Nintendo eShop 3DS DB/{country_code}/{format_name(name)}"
         if not os.path.exists(game_directory):
             os.makedirs(game_directory)
@@ -114,8 +113,14 @@ def get_data_from_country(country_code):
         except (requests.exceptions.RequestException, ET.ParseError) as e:
             print(f"Error: {e}")
 
-    for content in root.findall(".//content"):
-        create_game_files(country_code, content)
+    if root.findall(".//content"):
+        xml_dir = f"Nintendo eShop 3DS DB/{country_code}/"    
+        if not os.path.exists(xml_dir):
+            os.makedirs(xml_dir)
+        
+        open(xml_dir+"region_info.xml", "wb").write(response.content)
+        for content in root.findall(".//content"):
+            create_game_files(country_code, content)
 
 
 # Function that starts a thread for each country
