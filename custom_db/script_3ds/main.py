@@ -1,5 +1,6 @@
 import os
 import xml.etree.ElementTree as ET
+import urllib.parse
 
 def generate_xml_files():
     root_dir = './Nintendo eShop 3DS DB/'
@@ -17,6 +18,18 @@ def generate_xml_files():
                     if os.path.exists(game_xml_path):
                         print(f"  Adding {game_xml_path} to {region_dir}.xml...")
                         game_xml = ET.parse(game_xml_path).getroot()
+                        # replace icon URL
+                        icon_path = os.path.join(game_path, 'icon.png')
+                        icon_url_path = os.path.relpath(icon_path, './Nintendo eShop 3DS DB/').replace('\\', '/')
+                        icon_url = 'https://cdn.ghosteshop.com/db/3ds/' + urllib.parse.quote(icon_url_path)
+                        for icon_url_element in game_xml.findall('.//icon_url'):
+                            icon_url_element.text = icon_url
+                        # replace banner URL
+                        banner_path = os.path.join(game_path, 'banner.png')
+                        banner_url_path = os.path.relpath(banner_path, './Nintendo eShop 3DS DB/').replace('\\', '/')
+                        banner_url = 'https://cdn.ghosteshop.com/db/3ds/' + urllib.parse.quote(banner_url_path)
+                        for banner_url_element in game_xml.findall('.//banner_url'):
+                            banner_url_element.text = banner_url
                         region_xml.append(game_xml)
             xml_string = ET.tostring(region_xml).decode()
             xml_dir = os.path.join('nlib', '3ds_db', 'country')
