@@ -36,8 +36,7 @@ moflex/
 ## Configuration
 Adjust the following parameters in the script according to your needs:
 
-- `MAX_WORKERS`: Maximum number of threads to use for parallel downloads.
-
+- `MAX_WORKERS`: Maximum number of threads to use for parallel downloads, by default is `10`.
 
 ## Important Notes
 - **URL:** The script uses a specific URL to fetch MOFLEX files. Ensure the URL is up-to-date and valid.

@@ -4,7 +4,7 @@ from tqdm import tqdm
 from urllib.parse import urlparse
 from concurrent.futures import ThreadPoolExecutor
 
-MAX_WORKERS = 30  # Maximum number of threads to use
+MAX_WORKERS = 10  # Maximum number of threads to use
 
 links_req = requests.get("""https://web.archive.org/cdx/search/cdx?url=https://kanzashi-movie-ctr.cdn.nintendo.net/m/&matchType=prefix&filter=statuscode%3A200&filter=original:.*(.moflex).*&fl=original&collapse=urlkey""")
 links = links_req.text.splitlines()
