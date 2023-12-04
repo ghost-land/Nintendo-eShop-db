@@ -65,10 +65,7 @@ The `imageconvertor.py` module provides the `concatenate_images` function, used 
 - **SSL Certificate:** Disable SSL warnings using `urllib3.disable_warnings()` due to potential issues with the Nintendo eShop API SSL certificate.
 - **Terms of Use:** Ensure compliance with the terms of use for the Nintendo eShop API when using this script.
 
-Feel free to customize the script according to your requirements.
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Feel free to customize the script according to your requirements. For example, you can modify the `main.py` script to retrieve data for a single country code or to download only specific images.
 
 ## Acknowledgments
 - [3dbrew](https://www.3dbrew.org/wiki/Nintendo_eShop)
@@ -209,3 +206,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Léon Le Breton](https://github.com/LeonLeBreton) & [22sh](https://twitter.com/0x22sh) for the improvements & more.
 
 For more details, see [commits history](https://github.com/ghost-land/Nintendo-eShop-db/commits/main/script_3ds).
+
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
