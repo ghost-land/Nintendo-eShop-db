@@ -3,7 +3,6 @@
 The `main.py` script is designed to interact with the Nintendo eShop API for 3DS games. It retrieves information such as game titles, product codes, and images for a specified list of country codes. This README provides instructions on how to use the script and details about its functionality.
 
 ## Prerequisites
-
 Before running the script, ensure you have the following dependencies installed:
 
 - Python 3
@@ -25,11 +24,13 @@ Run the script:
 ```bash
 python main.py
 ```
-The script will sequentially retrieve data for each specified country code. It follows these steps:
-    - Queries the Nintendo eShop API for a list of titles.
-    - Creates directories for each game in the specified country.
-    - Downloads XML files containing game information.
-    - Downloads and saves icon, banner, thumbnails, and concatenated screenshot images.
+
+The script will sequentially retrieve data for each specified country code.
+It follows these steps:
+- Queries the Nintendo eShop API for a list of titles.
+- Creates directories for each game in the specified country.
+- Downloads XML files containing game information.
+- Downloads and saves icon, banner, thumbnails, and concatenated screenshot images.
 
 The script will create a directory structure under `Nintendo eShop 3DS DB/` for each country code, organized by game titles.
 
