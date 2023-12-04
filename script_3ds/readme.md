@@ -201,7 +201,7 @@ Feel free to customize the script according to your requirements. For example, y
 </details>
 
 
-### Credits:
+## Credits
 - [Ghost0159](https://github.com/Ghost0159) for the original script and analysis of Nintendo's CDN.
 - [Léon Le Breton](https://github.com/LeonLeBreton) & [22sh](https://twitter.com/0x22sh) for the improvements & more.
 
