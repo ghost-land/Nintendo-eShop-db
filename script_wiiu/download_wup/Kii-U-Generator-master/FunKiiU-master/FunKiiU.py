@@ -4,7 +4,7 @@
 
 from __future__ import unicode_literals, print_function
 
-__VERSION__ = 2.2
+__VERSION__ = 2.2.1
 
 import argparse
 import base64
@@ -164,7 +164,7 @@ def save_config(config):
 
 def user_input_keysite():
     print('\nPlease type *the* keysite to access online keys and tickets')
-    print('Type something like: http://wiiu.xxxxxxxx.xxx')
+    print('Type something like: http://dev.xxxxxxxxxx.xxx')
     print('You MUST type the full address, INCLUDING http:// or https://')
     print('A blank response will exit the program')
     checkurl = real_input('Enter keysite >> ').lower().strip()
@@ -327,7 +327,7 @@ def process_title_id(title_id, title_key, name=None, region=None, output_dir=Non
 
 def main(titles=None, keys=None, onlinekeys=False, onlinetickets=False, download_regions=False, output_dir=None,
          retry_count=3, patch_demo=True, patch_dlc=True, simulate=False, tickets_only=False):
-    print('*******\nFunKiiU {} by cearp and the cerea1killer\n*******\n'.format(__VERSION__))
+    print('*******\nFunKiiU {} modified by Ghost Land Team and created by cearp and the cerea1killer\n*******\n'.format(__VERSION__))
     titlekeys_data = []
 
     if download_regions is None:
