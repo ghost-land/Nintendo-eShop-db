@@ -1,4 +1,4 @@
-# Nintendo eShop 3DS Database
+# Nintendo eShop 3DS Scraper
 
 The `main.py` script is designed to interact with the Nintendo eShop API for 3DS games. It retrieves information such as game titles, product codes, and images for a specified list of country codes. This README provides instructions on how to use the script and details about its functionality.
 
