@@ -69,14 +69,14 @@ def process_game(country_code, content):
             icon_url_element = content.find(".//icon_url")
             if icon_url_element is not None:
                 icon_url = icon_url_element.text
-                icon_file = f"{ressources_directory}/icon.png"
+                icon_file = f"{ressources_directory}/icon.jpg"
                 download_image(icon_url, icon_file)
 
             # Download and save the banner
             banner_url_element = content.find(".//banner_url")
             if banner_url_element is not None:
                 banner_url = banner_url_element.text
-                banner_file = f"{ressources_directory}/banner.png"
+                banner_file = f"{ressources_directory}/banner.jpg"
                 download_image(banner_url, banner_file)
 
             # Download and save screenshots
@@ -88,7 +88,7 @@ def process_game(country_code, content):
                 if screenshot is not None:
                     screenshots_directory = f"{game_directory}/screenshots"
                     screenshot_url = screenshot.text
-                    screenshot_file = f"{screenshots_directory}/screenshot_{i+1}.png"
+                    screenshot_file = f"{screenshots_directory}/screenshot_{i+1}.jpg"
                     download_image(screenshot_url, screenshot_file)
                 else:
                     print("No screenshot found")
