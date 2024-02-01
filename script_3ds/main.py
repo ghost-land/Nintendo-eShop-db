@@ -27,7 +27,7 @@ def create_game_files(country_code, content):
     title_id = content.find(".//title").attrib["id"]
     product_code = content.find(".//product_code").text
     name = content.find(".//name").text
-    print(f"Game found : title_id: {title_id}, product_code: {product_code}, name: {name}")
+    print(f"Game found: title_id: {title_id}, product_code: {product_code}, name: {name}")
 
     if product_code.startswith('CTR') or product_code.startswith('KTR') or product_code.startswith('TWL'):
         url = f"https://samurai.ctr.shop.nintendo.net/samurai/ws/{country_code}/title/{title_id}/?shop_id=1"
@@ -39,7 +39,7 @@ def create_game_files(country_code, content):
                 root = ET.fromstring(response.text)
                 goodroot = True
             except (ET.ParseError, requests.exceptions.RequestException) as e:
-                print(f"Error : {e} ")
+                print(f"Error: {e}")
 
         game_directory = f"Nintendo eShop 3DS DB/{country_code}/{format_name(name)}"
         if not os.path.exists(game_directory):
@@ -52,75 +52,71 @@ def create_game_files(country_code, content):
         if icon_url_element is not None:
             icon_url = icon_url_element.text
             icon_response = requests.get(icon_url, verify=False)
-            icon_file = f"{game_directory}/icon.jpg"  # Save as jpg
+            icon_file = f"{game_directory}/icon.jpg"
             img = Image.open(BytesIO(icon_response.content))
             img.save(icon_file)
 
-            banner_url_element = root.find(".//banner_url")
-            if banner_url_element is not None:
-                banner_url = banner_url_element.text
-                banner_response = requests.get(banner_url, verify=False)
-                banner_file = f"{game_directory}/banner.jpg"  # Save as jpg
-                img = Image.open(BytesIO(banner_response.content))
-                img.save(banner_file)
+        banner_url_element = root.find(".//banner_url")
+        if banner_url_element is not None:
+            banner_url = banner_url_element.text
+            banner_response = requests.get(banner_url, verify=False)
+            banner_file = f"{game_directory}/banner.jpg"
+            img = Image.open(BytesIO(banner_response.content))
+            img.save(banner_file)
 
-            thumbnails = root.findall(".//thumbnails")
-            if thumbnails:
-                if not os.path.exists(f"{game_directory}/thumbnails"):
-                    os.makedirs(f"{game_directory}/thumbnails")
-                for th in thumbnails:
-                    for i, thumbnail in enumerate(th):
-                        response = requests.get(thumbnail.get('url'), verify=False)
-                        filename = f"{game_directory}/thumbnails/thumbnail_{i + 1}.jpg"  # Save as jpg
-                        img = Image.open(BytesIO(response.content))
-                        img.save(filename)
+        top_image_element = root.find(".//top_image/url")
+        if top_image_element is not None:
+            top_image_url = top_image_element.text
+            if top_image_url:
+                response = requests.get(top_image_url, verify=False)
+                top_image_file = f"{game_directory}/top_image.jpg"
+                img = Image.open(BytesIO(response.content))
+                img.save(top_image_file)
 
-            screenshots = root.findall(".//screenshots/screenshot")
-            if screenshots:
-                if not os.path.exists(f"{game_directory}/screenshots"):
-                    os.makedirs(f"{game_directory}/screenshots")
-                for i, screenshot in enumerate(screenshots):
-                    upper_image_url = screenshot.find(
-                        ".//image_url[@type='upper']")
-                    lower_image_url = screenshot.find(
-                        ".//image_url[@type='lower']")
-                    if upper_image_url is not None:
-                        upper_url = upper_image_url.text
-                        response = requests.get(upper_url, verify=False)
-                        upper_image = BytesIO(response.content)
-                        if lower_image_url is not None:
-                            lower_url = lower_image_url.text
-                            response = requests.get(
-                                lower_url, verify=False)
-                            lower_image = BytesIO(response.content)
-                            if upper_image_url is not None and lower_image_url is not None:
-                                concatenate_images(upper_image,
-                                                   lower_image, f"{game_directory}/screenshots/screenshot_{i+1}.jpg")
+        thumbnails = root.findall(".//thumbnails")
+        if thumbnails:
+            if not os.path.exists(f"{game_directory}/thumbnails"):
+                os.makedirs(f"{game_directory}/thumbnails")
+            for th in thumbnails:
+                for i, thumbnail in enumerate(th):
+                    response = requests.get(thumbnail.get('url'), verify=False)
+                    filename = f"{game_directory}/thumbnails/thumbnail_{i + 1}.jpg"
+                    img = Image.open(BytesIO(response.content))
+                    img.save(filename)
 
-            screenshots_uncompiled = root.findall(".//screenshots/screenshot")
-            if screenshots_uncompiled:
-                if not os.path.exists(f"{game_directory}/screenshots_uncompiled"):
-                    os.makedirs(f"{game_directory}/screenshots_uncompiled")
-                screenshots_uncompiled_dir = f"{game_directory}/screenshots_uncompiled"
-                if not os.path.exists(screenshots_uncompiled_dir):
-                    os.makedirs(screenshots_uncompiled_dir)
-                for i, screenshots_uncompiled in enumerate(screenshots_uncompiled):
-                    upper_image_url = screenshot.find(".//image_url[@type='upper']")
-                    lower_image_url = screenshot.find(".//image_url[@type='lower']")
-                    if upper_image_url is not None:
-                        upper_url = upper_image_url.text
-                        response = requests.get(upper_url, verify=False)
-                        upper_image = BytesIO(response.content)
-                        if lower_image_url is not None:
-                            lower_url = lower_image_url.text
-                            response = requests.get(lower_url, verify=False)
-                            lower_image = BytesIO(response.content)
-                            if upper_image_url is not None and lower_image_url is not None:
-                                # Save upper and lower images separately
-                                img_upper = Image.open(upper_image)
-                                img_upper.save(f"{game_directory}/screenshots_uncompiled/screenshot_{i + 1}_upper.jpg")
-                                img_lower = Image.open(lower_image)
-                                img_lower.save(f"{game_directory}/screenshots_uncompiled/screenshot_{i + 1}_lower.jpg")
+        screenshots = root.findall(".//screenshots/screenshot")
+        if screenshots:
+            if not os.path.exists(f"{game_directory}/screenshots"):
+                os.makedirs(f"{game_directory}/screenshots")
+            for i, screenshot in enumerate(screenshots):
+                upper_image_url = screenshot.find(".//image_url[@type='upper']")
+                lower_image_url = screenshot.find(".//image_url[@type='lower']")
+                if upper_image_url is not None and lower_image_url is not None:
+                    upper_url = upper_image_url.text
+                    lower_url = lower_image_url.text
+                    response_upper = requests.get(upper_url, verify=False)
+                    response_lower = requests.get(lower_url, verify=False)
+                    concatenate_images(BytesIO(response_upper.content), BytesIO(response_lower.content), f"{game_directory}/screenshots/screenshot_{i+1}.jpg")
+
+        screenshots_uncompiled = root.findall(".//screenshots/screenshot")
+        if screenshots_uncompiled:
+            if not os.path.exists(f"{game_directory}/screenshots_uncompiled"):
+                os.makedirs(f"{game_directory}/screenshots_uncompiled")
+            for i, screenshot_uncompiled in enumerate(screenshots_uncompiled):
+                upper_image_url = screenshot_uncompiled.find(".//image_url[@type='upper']")
+                lower_image_url = screenshot_uncompiled.find(".//image_url[@type='lower']")
+                if upper_image_url is not None:
+                    upper_url = upper_image_url.text
+                    response = requests.get(upper_url, verify=False)
+                    upper_image = BytesIO(response.content)
+                    img_upper = Image.open(upper_image)
+                    img_upper.save(f"{game_directory}/screenshots_uncompiled/screenshot_{i + 1}_upper.jpg")
+                if lower_image_url is not None:
+                    lower_url = lower_image_url.text
+                    response = requests.get(lower_url, verify=False)
+                    lower_image = BytesIO(response.content)
+                    img_lower = Image.open(lower_image)
+                    img_lower.save(f"{game_directory}/screenshots_uncompiled/screenshot_{i + 1}_lower.jpg")
 
 # Function to retrieve data from a country
 def get_data_from_country(country_code):
